@@ -1,0 +1,74 @@
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+
+<div class="main-content container-fluid">
+    <section id="multiple-column-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh; padding-right: 10px;">
+            <div class="col-md-7 col-12" style="padding-left: 100;">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Edit Welfare Details</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                        <form class="forms-sample" action="{% url 'edit_welfare' welfare_id=welfare.welfare_id %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="membername">Welfare Title</label>
+                                <input type="text" class="form-control" id="membername" name="welfaretitle" value="{{welfare.welfaretitle}}" required>
+                            </div>
+                           
+                            <div class="col-md-12">
+                                <label class="text-black" for="message">Welfare Purpose</label> 
+                                <textarea name="welfarepurpose" id="welfarepurpose" cols="30" rows="4" class="form-control">{{ welfare.welfarepurpose }}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="licensephoto">Welfare Date</label>
+                                <input type="date" class="form-control" id="licensephoto" name="welfaredate" value="{{ welfare.welfaredate|date:'Y-m-d' }}">
+
+
+                            </div>
+                           
+
+                            <!-- <div class="form-group">
+                                <label for="district_id">District</label>
+                                <select class="form-control" id="district_id" name="district_id" required>
+                                    <option value="0">--SELECT DISTRICT--</option>
+                                    {% for d in district %}
+                                        <option value="{{d.district_id}}">{{d.districtname}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="unit">Unit</label>
+                                <select class="form-control" id="unit" name="unit" required>
+                                    <option value="0">--SELECT UNIT--</option>
+                                </select>
+                            </div> -->
+
+                            <div class="form-group">
+                                <label for="phone">Amount</label>
+                                <input type="text" class="form-control" id="phone" name="amount" value="{{welfare.amount}}" required >
+                            </div>
+
+                            
+
+                            
+                        </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-12 text-center">
+                                <button type="submit" name="btnadd" class="btn btn-primary px-5 py-3 rounded-pill">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+    {% include 'admin/footer.html' %}
+   

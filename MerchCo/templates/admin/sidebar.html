@@ -1,0 +1,127 @@
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Core</div>
+                    <a class="nav-link" href="{% url 'index' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Interface</div>
+                    
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Registrations
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="{% url 'district' %}">district Registration</a>
+                            <a class="nav-link" href="{% url 'location' %}">Location Registration</a>
+                            <a class="nav-link" href="{% url 'unit' %}">Unit Registration</a>
+                        </nav>
+                    </div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePage" aria-expanded="false" aria-controls="collapsePage">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Views
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePage" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            
+                                    <a class="nav-link" href="{% url 'viewdistrict' %}">District View</a>
+                                    <a class="nav-link" href="{% url 'viewlocation' %}">Location View</a>
+                                    <a class="nav-link" href="{% url 'viewunit' %}">Unit View</a>
+                                </nav>
+                            </div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePag" aria-expanded="false" aria-controls="collapsePag">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Members
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePag" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    
+                                            <a class="nav-link" href="{% url 'memberreg' %}">Add Member</a>
+                                            <a class="nav-link" href="{% url 'viewmember' %}">View Member</a>
+                                            <a class="nav-link" href="{% url 'verification' %}">Member Verification</a>
+                                        </nav>
+                                    </div>
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                        Welfares
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            
+                                                    <a class="nav-link" href="{% url 'welfarereg' %}">Add Welfare</a>
+                                                    <a class="nav-link" href="{% url 'viewwelfare' %}">View Welfare</a>
+                                               
+                                                </nav>
+                                            </div>
+                                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePa" aria-expanded="false" aria-controls="collapsePa">
+                                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                                Loans
+                                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                            </a>
+                                            <div class="collapse" id="collapsePa" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                                <nav class="sb-sidenav-menu-nested nav">
+                                                    
+                                                            <a class="nav-link" href="{% url 'loanverification' %}">Loan Verification</a>
+                                                            <a class="nav-link" href="{% url 'acceptedloan' %}">Accepted Loans</a>
+                                                       
+                                                        </nav>
+                                                    </div>
+                    <!-- <div class="sb-sidenav-menu-heading">Addons</div> -->
+                    
+                    <a class="nav-link" href="{% url 'notification' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Notifications
+                    </a>
+                    <a class="nav-link" href="{% url 'viewnotification' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        View Notifications
+                    </a>
+
+
+                    <a class="nav-link" href="{% url 'viewloanpayment' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        View Payments
+                    </a>
+
+                    <a class="nav-link" href="{% url 'viewwelfarepayment' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        View  Welfare Payments
+                    </a>
+                  
+                    <a class="nav-link" href="{% url 'publishedwelfare' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Published Welfare
+                    </a>
+                    <a class="nav-link" href="{% url 'pie_chart' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Pie chart unit per district
+                    </a>
+                    <a class="nav-link" href="{% url 'deposit_bar_chart' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Bar Chart
+                    </a>
+                    <a class="nav-link" href="{% url 'loan_transaction_area_chart' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Area Chart
+                    </a>
+                    <a class="nav-link" href="{% url 'export_excel' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        View Loans
+                    </a>
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Logged in as:</div>
+                Start Bootstrap
+            </div>
+        </nav>
+    </div>

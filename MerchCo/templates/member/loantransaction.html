@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Transaction Details</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .back-arrow {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            color: #333;
+            font-size: 24px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 15px;
+            transition: 0.3s;
+        }
+
+        .back-arrow:hover {
+            color: #b66dff;
+        }
+
+        header {
+            background-color: #43464b;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 80%;
+            margin: 30px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .loan-details {
+            width: 50%;
+        }
+
+        .loan-details p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .loan-details strong {
+            color: #000;
+        }
+
+        .table-section {
+            width: 45%;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #43464b;
+            color: white;
+        }
+
+        .installment-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .installment-list li {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .installment-list li:hover {
+            background-color: #f1f1f1;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .pay-button {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .pay-button.red {
+            background-color: maroon;
+        }
+
+        .pay-button.green {
+            background-color: green;
+        }
+
+        .pay-button.ash {
+    background-color: #808080; /* Ash/Grey Color */
+}
+
+
+        .pay-button:hover {
+            opacity: 0.8;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            background-color: #43464b;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            text-align: center;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #555;
+        }
+    </style>
+    <script>
+        function disableButton(button) {
+            button.disabled = true;
+            button.innerText = "Processing...";
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <h1>Loan Transaction Details</h1>
+    </header>
+
+    <a href="{% url 'viewloanreq' %}" class="back-arrow">⬅</a>
+
+    <div class="container">
+        <div class="loan-details">
+            <p><strong>Loan ID:</strong> {{ loan.loan_id }}</p>
+            <p><strong>Member ID:</strong> {{ loan.member_id.member_id }}</p>
+            <p><strong>Amount:</strong> ₹ {{ loan.amount }}</p>
+            <p><strong>Monthly Installment:</strong> ₹ {{ loan.monthlyamount }}</p>
+
+            <h3>Installment Payment Dates:</h3>
+<ul class="installment-list">
+    {% for date in installment_dates %}
+        {% with date|date:"Y-m-d" as formatted_date %}
+            {% if formatted_date not in paid_due_dates %}
+                <li>
+                    <span><strong>Payment Due Date:</strong> {{ formatted_date }}</span>
+
+                   <a href="{% url 'loanpayment' id=loan.loan_id %}?due_date={{ formatted_date }}"
+   class="pay-button {% if date < current_date %}red{% elif date == current_date %}green{% else %}ash{% endif %}">
+   Pay Now
+</a>
+
+                </li>
+            {% endif %}
+        {% endwith %}
+    {% endfor %}
+</ul>
+
+
+        </div>
+
+        <div class="table-section">
+            <h2>Loan Transaction History</h2>
+            <table>
+                <tr>
+                    <th>Loan ID</th>
+                    <th>Balance Amount</th>
+                    <th>Monthly Installment</th>
+                    <th>Latest Payment Status</th>
+                    <th>Paid Date</th>
+                    <th>Due date</th>
+                    <th>Fine</th>
+
+                </tr>
+                {% for transaction in loantrans %}
+                <tr>
+                    <td>{{ transaction.loan_id.loan_id }}</td>
+                    <td>₹ {{ transaction.loan_id.amount }}</td>
+                    <td>₹ {{ transaction.amount }}</td>
+                    <td>{{ transaction.status }}</td>
+                    <td>{{ transaction.paiddate }}</td>
+                    <td>{{ transaction.paidduedate }}</td>
+                    <td>{{ transaction.fine }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No transactions found</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="#" class="back-button">Back to Loan List</a>
+    </div>
+
+</body>
+</html>

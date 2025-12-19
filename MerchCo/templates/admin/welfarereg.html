@@ -1,0 +1,129 @@
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+
+<div class="main-content container-fluid" style="background: linear-gradient(135deg, #00bcd4, #f2c94c);">
+    <section id="multiple-column-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh; padding-right: 10px;">
+            <div class="col-md-7 col-12">
+                <div class="card shadow-lg rounded-3" style="background-color: #ffffff; border-radius: 20px; padding: 20px;">
+                    <div class="card-header text-center" style="background: linear-gradient(135deg, #007bff, #00bcd4); color: white; border-radius: 15px;">
+                        <h4 class="card-title"><i class="fas fa-clipboard-list me-2"></i> Welfare Registration</h4>
+                    </div>
+                    <div class="card-body">
+                        <form class="forms-sample" action="{% url 'welfare_process' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <!-- Welfare Title Input -->
+                            <div class="form-group mb-4">
+                                <label for="membername" class="form-label text-muted"><i class="fas fa-tag me-2"></i> Welfare Title</label>
+                                <input type="text" class="form-control form-control-lg shadow-sm border-0 rounded-3" id="membername" name="welfaretitle" placeholder="Enter Welfare Title" required>
+                            </div>
+
+                            <!-- Welfare Purpose Textarea -->
+                            <div class="form-group mb-4">
+                                <label class="text-muted" for="welfarepurpose"><i class="fas fa-pencil-alt me-2"></i> Welfare Purpose</label>
+                                <textarea name="welfarepurpose" id="welfarepurpose" class="form-control form-control-lg shadow-sm border-0 rounded-3" rows="4" placeholder="Write the purpose of the welfare..." required></textarea>
+                            </div>
+
+                            <!-- Welfare Date Input -->
+                            <div class="form-group mb-4">
+                                <label for="licensephoto" class="form-label text-muted"><i class="fas fa-calendar-day me-2"></i> Welfare Date</label>
+                                <input type="date" class="form-control form-control-lg shadow-sm border-0 rounded-3" id="licensephoto" name="welfaredate" required>
+                            </div>
+
+                            <!-- Amount Input -->
+                            <div class="form-group mb-4">
+                                <label for="phone" class="form-label text-muted"><i class="fas fa-money-bill-wave me-2"></i> Amount</label>
+                                <input type="text" class="form-control form-control-lg shadow-sm border-0 rounded-3" id="phone" name="amount" placeholder="Enter Amount" required>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" name="btnadd" class="btn btn-primary px-5 py-3 rounded-pill shadow-lg transition-all hover:scale-105">
+                                    <i class="fas fa-plus-circle me-2"></i> Add Now
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% include 'admin/footer.html' %}
+<style>/* Light Gradient Background */
+    .main-content {
+        background: linear-gradient(135deg, #00bcd4, hwb(30 93% 7%));
+    }
+    
+    /* Card Styling */
+    .card {
+        background-color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+    
+    /* Card Header Styling */
+    .card-header {
+        background: linear-gradient(135deg, #007bff, #00bcd4);
+        color: white;
+        border-radius: 15px;
+        padding: 20px;
+    }
+    
+    /* Form Input Fields */
+    .form-control {
+        border-radius: 10px;
+        font-size: 16px;
+        padding: 12px;
+        border: 1px solid #e0e0e0;
+        transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
+    
+    /* Submit Button */
+    button.btn-primary {
+        background: linear-gradient(135deg, #007bff, #00bcd4);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        padding: 15px 40px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+    
+    button.btn-primary:hover {
+        background: linear-gradient(135deg, #0056b3, #00a0d4);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: scale(1.05);
+    }
+    
+    /* Icons */
+    i.fas {
+        color: #007bff;
+    }
+    
+    /* Focus effect on form inputs */
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.3);
+    }
+    
+    /* Form Field Label */
+    .form-label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #007bff;
+    }
+    
+    /* Section Padding */
+    section {
+        padding: 60px 0;
+    }
+    </style>

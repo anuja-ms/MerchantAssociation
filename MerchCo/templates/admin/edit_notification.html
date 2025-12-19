@@ -1,0 +1,49 @@
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+<div class="main-content container-fluid">
+    <section id="multiple-column-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh; padding-right: 10px;">
+            <div class="col-md-7 col-12" style="padding-left: 100;">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Edit Notifications</h4>
+                        
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                        <form class="forms-sample" action="{% url 'edit_notification' notification_id=notification.notification_id %}" method="POST" enctype="multipart/form-data"> 
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="membername">Title</label>
+                                <input type="text" class="form-control" id="membername" name="title" placeholder="" value="{{notification.notificationtitle}}"required>
+                            </div>
+                           
+                            <div class="col-md-12">
+                                <label class="text-black" for="message">Message</label> 
+                                <textarea name="description" id="message" cols="30" rows="5" class="form-control">{{notification.notificationdescription}}</textarea>
+                              </div>
+
+                             
+                            <div class="form-group">
+                                <label for="licensephoto">Update Expiry Date</label>
+                                <input type="date" name="date" class="form-control" id="licensephoto" placeholder="" value="{{ notification.expirydate|date:'Y-m-d' }}" required>
+                            </div>
+
+                            
+                            
+                        </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-12 text-center">
+                                <button type="submit" name="btnadd" class="btn btn-primary px-5 py-3 rounded-pill">Add Now</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% include "admin/footer.html" %}
+   

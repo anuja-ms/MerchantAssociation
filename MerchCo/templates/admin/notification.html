@@ -1,0 +1,58 @@
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+
+<!-- Main Content -->
+<div class="main-content container-fluid">
+    <section id="notification-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh; padding-right: 10px;">
+            <div class="col-md-7 col-12" style="padding-left: 100px;">
+                <div class="card shadow-sm border-light">
+                    <div class="card-header text-center bg-info text-white">
+                        <h4 class="card-title"><i class="fas fa-bell"></i> Create Notification</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <!-- Notification Form -->
+                            <form class="forms-sample" action="{% url 'notification_process' %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+
+                                <!-- Title Field -->
+                                <div class="form-group">
+                                    <label for="membername">
+                                        <i class="fas fa-heading"></i> Title
+                                    </label>
+                                    <input type="text" class="form-control" id="membername" name="title" placeholder="Enter notification title" required>
+                                </div>
+
+                                <!-- Message Field -->
+                                <div class="form-group">
+                                    <label for="message">
+                                        <i class="fas fa-comment-alt"></i> Message
+                                    </label>
+                                    <textarea name="description" id="message" cols="30" rows="5" class="form-control" placeholder="Write your notification message..." required></textarea>
+                                </div>
+
+                                <!-- Expiry Date Field -->
+                                <div class="form-group">
+                                    <label for="licensephoto">
+                                        <i class="fas fa-calendar-alt"></i> Expiry Date
+                                    </label>
+                                    <input type="date" class="form-control" id="licensephoto" name="date" required>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="col-12 text-center mt-4">
+                                    <button type="submit" name="btnadd" class="btn btn-success px-5 py-3 rounded-pill">
+                                        <i class="fas fa-paper-plane"></i> Add Notification
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% include "admin/footer.html" %}

@@ -1,0 +1,183 @@
+{% load static %}
+<script src="{% static 'jquery-3.7.1.min.js' %}"></script>
+<script>
+$(document).ready(function() {
+    // Setup the CSRF token for AJAX requests
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": '{{ csrf_token }}' }
+    });
+
+    // When a district is selected
+    $("#district_id").change(function() {
+        var district_id = $(this).val();
+        
+        // AJAX POST request to fetch locations
+        $.ajax({
+            type: "POST",
+            url: '{% url "fillunit" %}',
+            data: { did: district_id },
+            dataType: "json",
+            success: function(data) {
+                // Empty the locations dropdown
+                $('#unit').empty();
+
+                // Populate the locations table with the new data
+                $.each(data, function(key, val) {
+                    
+                    var row = "<option value='"+val.unit_id+"'>"+val.unitname+"</option>";
+
+                    $('#unit').append(row);
+                });
+            }
+        });
+    });
+});
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form by Colorlib</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{% static 'guestreg/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'guestreg/css/style.css' %}">
+</head>
+<body>
+
+    <div class="main">
+        <div class="container">
+            <div class="signup-content">
+                <div class="signup-img">
+                    <img src="{% static 'guestmain/images/img_2.jpg' %}" alt="" style="max-width: 600px; height: 1000px;">
+                </div>
+                <div class="signup-form">
+                    <form method="POST" action="{% url 'register_process' %}" class="register-form" id="register-form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h2 class="section-title mb-3">Member registration form</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Member Name :</label>
+                                <input type="text" name="membername" id="name" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="father_name">Member Photo :</label>
+                                <input type="file" name="memberphotos" id="memberphoto" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Shop License :</label>
+                            <input type="file" name="licensephotos" id="address" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="birth_date">KMCC Member Code :</label>
+                            <input type="tel" name="membercode" id="birth_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="district_id">District</label>
+                            <select class="form-control" id="district_id" name="district_id" required>
+                                <option value="0">--SELECT DISTRICT--</option>
+                                {% for d in district %}
+                                    <option value="{{d.district_id}}">{{d.districtname}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="unit">Unit</label>
+                            <select class="form-control" id="unit" name="unit" required>
+                                <option value="0">--SELECT UNIT--</option>
+                            </select>
+                        </div>
+
+                         <div class="form-radio">
+                            <label for="gender" class="radio-label">Member Class :</label>
+                            <div class="form-radio-item">
+                                <input type="radio" name="class" id="male" checked value="A-class">
+                                <label for="male">A-Class</label>
+                                <span class="check"></span>
+                            </div>
+                            <div class="form-radio-item">
+                                <input type="radio" name="class" id="female" value="C-class">
+                                <label for="female">C-Class</label>
+                                <span class="check"></span>
+                            </div>
+                        </div> 
+                        <br>
+                        <!-- <div class="form-row">
+                            <div class="form-group">
+                                <label for="state">State :</label>
+                                <div class="form-select">
+                                    <select name="state" id="state">
+                                        <option value=""></option>
+                                        <option value="us">America</option>
+                                        <option value="uk">English</option>
+                                    </select>
+                                    <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City :</label>
+                                <div class="form-select">
+                                    <select name="city" id="city">
+                                        <option value=""></option>
+                                        <option value="losangeles">Los Angeles</option>
+                                        <option value="washington">Washington</option>
+                                    </select>
+                                    <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="form-group">
+                            <label for="birth_date">Mobile No :</label>
+                            <input type="tel" name="phone" id="birth_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email :</label>
+                            <input type="email" name="mail" id="pincode">
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="course">Course :</label>
+                            <div class="form-select">
+                                <select name="course" id="course">
+                                    <option value=""></option>
+                                    <option value="computer">Computer Operator & Pragramming Assistant</option>
+                                    <option value="desiger">Designer</option>
+                                    <option value="marketing">Marketing</option>
+                                </select>
+                                <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
+                            </div>
+                        </div> -->
+                        <div class="form-group">
+                            <label for="email">Designation :</label>
+                            <input type="text" name="designation" id="email" />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Username :</label>
+                            <input type="text" name="username" id="email" />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Password :</label>
+                            <input type="password" name="password" id="email" />
+                        </div>
+                       
+                        <div class="form-submit">
+                            <input type="submit" value="Reset All" class="submit" name="reset" id="reset" />
+                            <input type="submit" value="Submit Form" class="submit" name="submit" id="submit" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JS -->
+    <script src="{% static 'guestreg/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'guestreg/js/main.js' %}"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

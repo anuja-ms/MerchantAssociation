@@ -1,0 +1,231 @@
+{% include "member/header.html" %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const depositInput = document.getElementById('memberphoto');
+        const interestRateInput = document.getElementById('interestrate');
+        const maturityDateInput = document.getElementById('maturitydate');
+        const maturedAmountInput = document.getElementById('maturedamount');
+        const yearsSelect = document.getElementById('years'); // Select for years to maturity
+        const paymentAmountInput = document.getElementById('paymentAmount');  // The input in the modal to show the deposit amount
+
+        // Hidden Inputs for Payment Modal
+        const hiddenDepositInput = document.getElementById('paymentHiddenDepositAmount');
+        const hiddenInterestRateInput = document.getElementById('paymentHiddenInterestRate');
+        const hiddenYearsInput = document.getElementById('paymentHiddenYears');
+        const hiddenMaturityDateInput = document.getElementById('paymentHiddenMaturityDate');
+        const hiddenMaturedAmountInput = document.getElementById('paymentHiddenMaturedAmount');
+
+        const interestRate = 5;  // Example: fixed interest rate of 5%
+
+        // Function to calculate the maturity date and matured amount
+        function calculateMaturedAmount() {
+            const depositAmount = parseFloat(depositInput.value);
+            const yearsToMaturity = parseInt(yearsSelect.value); // Get the selected number of years
+            if (!isNaN(depositAmount) && depositAmount > 0) {
+                // Calculate maturity date based on the number of years selected
+                const maturityDate = new Date();
+                maturityDate.setFullYear(maturityDate.getFullYear() + yearsToMaturity);
+
+                // Update maturity date input field
+                maturityDateInput.value = maturityDate.toISOString().split('T')[0];  // Format as YYYY-MM-DD
+
+                // Set interest rate in the input field
+                interestRateInput.value = interestRate;
+
+                // Calculate the matured amount
+                const maturedAmount = depositAmount + (depositAmount * interestRate / 100 * yearsToMaturity);
+                maturedAmountInput.value = maturedAmount.toFixed(2);  // Round to 2 decimal places
+
+                // Populate hidden fields for the payment form
+                hiddenDepositInput.value = depositAmount;
+                hiddenInterestRateInput.value = interestRate;
+                hiddenYearsInput.value = yearsToMaturity;
+                hiddenMaturityDateInput.value = maturityDate.toISOString().split('T')[0];
+                hiddenMaturedAmountInput.value = maturedAmount.toFixed(2);
+
+                // Also update the deposit amount shown in the payment modal
+                paymentAmountInput.value = depositAmount;
+            } else {
+                // Clear the fields if the deposit is invalid
+                maturityDateInput.value = '';
+                interestRateInput.value = '';
+                maturedAmountInput.value = '';
+            }
+        }
+
+        // Event listener for deposit input change
+        depositInput.addEventListener('input', calculateMaturedAmount);
+
+        // Event listener for years to maturity change
+        yearsSelect.addEventListener('change', calculateMaturedAmount);
+
+        // Modal Popup
+        const addNowButton = document.querySelector('button[name="btnadd"]');
+        const modal = document.getElementById('paymentModal');
+        const closeModal = document.querySelector('.close');
+
+        // Open the modal when "Add Now" is clicked
+        addNowButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent form submission
+            calculateMaturedAmount();  // Calculate the values before showing the modal
+
+            modal.style.display = 'block'; // Show the modal
+        });
+
+        // Close the modal when the close button is clicked
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        // Close the modal if clicked outside the modal content
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<div class="main-content container-fluid">
+    <section id="multiple-column-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh; padding-right: 10px;">
+            <div class="col-md-7 col-12" style="padding-left: 100;">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Deposit</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form class="forms-sample" action="{% url 'deposite_process' %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+
+                                <!-- Deposit Amount -->
+                                <div class="form-group">
+                                    <label for="memberphoto">Deposit Amount</label>
+                                    <input type="number" class="form-control" id="memberphoto" name="deposite" placeholder="Amount you wish to deposit" required>
+                                </div>
+
+                                <!-- Interest Rate (readonly) -->
+                                <div class="form-group">
+                                    <label for="interestrate">Interest Rate</label>
+                                    <input type="text" class="form-control" id="interestrate" name="interestrate" placeholder="Interest rate" required readonly>
+                                </div>
+
+                                <!-- Years to Maturity -->
+                                <div class="form-group">
+                                    <label for="years">Years to Maturity</label>
+                                    <select id="years" class="form-control" name="years" required>
+                                        <option value="1">1 Year</option>
+                                        <option value="2">2 Years</option>
+                                        <option value="3">3 Years</option>
+                                        <option value="4">4 Years</option>
+                                        <option value="5">5 Years</option>
+                                    </select>
+                                </div>
+
+                                <!-- Maturity Date (readonly) -->
+                                <div class="form-group">
+                                    <label for="maturitydate">Maturity Date</label>
+                                    <input type="date" class="form-control" id="maturitydate" name="mdate" placeholder="Maturity Date" required readonly>
+                                </div>
+
+                                <!-- Matured Amount (readonly) -->
+                                <div class="form-group">
+                                    <label for="maturedamount">Matured Amount</label>
+                                    <input type="text" class="form-control" id="maturedamount" name="mamount" placeholder="Matured Amount" required readonly>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="col-12 text-center">
+                                    <button type="submit" name="btnadd" class="btn btn-primary px-5 py-3 rounded-pill">Add Now</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Modal Popup -->
+<div id="paymentModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Payment Form</h2>
+        <form action="{% url 'deposite_process' %}" method="POST">
+            {% csrf_token %}
+            <!-- Hidden Inputs for Deposit Details -->
+            <input type="hidden" name="deposite" id="paymentHiddenDepositAmount" value="">
+            <input type="hidden" name="interestrate" id="paymentHiddenInterestRate" value="">
+            <input type="hidden" name="years" id="paymentHiddenYears" value="">
+            <input type="hidden" name="mdate" id="paymentHiddenMaturityDate" value="">
+            <input type="hidden" name="mamount" id="paymentHiddenMaturedAmount" value="">
+
+            <!-- Deposit Amount (readonly for confirmation) -->
+            <div class="form-group">
+                <label for="paymentAmount">Deposit Amount</label>
+                <input type="text" class="form-control" name="paymentAmount" id="paymentAmount" placeholder="Deposit Amount" required readonly>
+            </div>
+
+            <!-- Card Information (e.g., Card Number, Expiration Date, CVV) -->
+            <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" class="form-control" name="cardnumber" id="cardNumber" placeholder="Enter card number" required>
+            </div>
+            <div class="form-group">
+                <label for="expDate">Expiration Date</label>
+                <input type="text" class="form-control" name="expdate" id="expDate" placeholder="MM/YY" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="text" class="form-control" name="cvv" id="cvv" placeholder="CVV" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary px-5 py-3 rounded-pill">Confirm Payment</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>

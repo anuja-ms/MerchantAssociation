@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Fee Payment</title>
+    <style>
+        /* General Styles */
+        body {
+            background: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Card Container */
+        .card {
+            width: 420px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            position: relative;
+        }
+
+        /* Title */
+        .card-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Navigation */
+        .nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .nav li {
+            padding: 10px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav .active {
+            border-bottom: 2px solid #7b3df0;
+        }
+
+        /* Member Details */
+        .member-details {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            text-align: left;
+        }
+
+        .member-details p {
+            margin: 5px 0;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-weight: 600;
+            margin: 20px 0 10px;
+            text-align: left;
+        }
+
+        /* Input Fields */
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 0.9em;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background: #fafafa;
+            font-size: 1em;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #7b3df0;
+            box-shadow: 0px 0px 8px rgba(123, 61, 240, 0.2);
+        }
+
+        /* Row Styling */
+        .row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .half {
+            width: 48%;
+        }
+
+        /* Pay Button */
+        .pay-btn {
+            width: 100%;
+            padding: 12px;
+            background: #7b3df0;
+            color: white;
+            font-size: 1.2em;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .pay-btn:hover {
+            background: #5a27d8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="card-title">
+        Registration Fee Payment
+    </div>
+
+    <div class="nav">
+        <ul>
+            <li class="active"><a href="#">Payment</a></li>
+        </ul>
+    </div>
+
+<form method="post" action="{% url 'registerfeepayment' member_id=member_id %}">
+    {% csrf_token %}
+
+    <div class="member-details">
+        <p><strong>Member Name:</strong> {{ name }}</p>
+        <p><strong>Member Class:</strong> <span id="member-class">{{ memberclass }}</span></p>
+    </div>
+
+    <div class="section-title">Card Details</div>
+
+    <div class="input-group">
+        <label>Card Holder Name</label>
+        <input type="text" placeholder="{{ name }}" value="{{ name }}">
+    </div>
+
+    <div class="input-group">
+        <label>Card Number</label>
+        <input type="text" placeholder="xxxx-xxxx-xxxx-xxxx" name="cardnumber">
+    </div>
+
+    <div class="row">
+        <div class="input-group half">
+            <label>Exp. Date</label>
+            <input type="text" placeholder="MM/YY">
+        </div>
+        <div class="input-group half">
+            <label>CVV</label>
+            <input type="text" placeholder="•••">
+        </div>
+    </div>
+
+    <input type="hidden" name="member_id" value="{{ member_id }}">
+    <input type="hidden" name="amount" id="amount-field" value="0">  <!-- Hidden field for amount -->
+
+    <button class="pay-btn" id="pay-btn">
+        <b>PAY ₹ 0</b>
+    </button>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get the member class text and trim spaces
+        var memberClass = document.getElementById("member-class").innerText.trim().toUpperCase();
+        var amount = 0;
+
+        // Set the fee amount based on member class
+        if (memberClass === "A-CLASS") {
+            amount = 5000;
+        } else if (memberClass === "C-CLASS") {
+            amount = 1000;
+        }
+
+        // Update the button text dynamically
+        document.getElementById("pay-btn").innerHTML = "<b>PAY ₹ " + amount + "</b>";
+
+        // Set the hidden input field with the amount
+        document.getElementById("amount-field").value = amount;
+    });
+</script>
+
+
+</body>
+</html>

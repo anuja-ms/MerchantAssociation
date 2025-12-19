@@ -1,0 +1,55 @@
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+
+<div class="main-content container-fluid">
+    <div class="col-12 d-flex justify-content-end">
+    </div>
+    <!-- Hoverable rows start -->
+    <div class="row justify-content-center align-items-center" style="min-height: 80vh; padding-right: 0px;">
+        <div class="col-md-8 col-12" style="padding-left: 100;">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Published Welfare Details</h4>
+                </div>
+                <div class="card-content">
+
+                    <!-- table hover -->
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered no-wrap">
+                            <thead>
+                                <tr>
+                                    <th>Welfare ID</th>
+                                    <th>Welfare Title</th>
+                                    <th>Welfare Purpose</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>                                 
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for m in welfare %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ m.welfaretitle }}</td>
+                                        <td>{{ m.welfarepurpose }}</td>
+                                        <td>{{ m.welfaredate }}</td>
+                                        <td>{{ m.amount }}</td>  
+                                        
+                                        
+                                        <td><a href="{% url 'inactive_welfare' id=m.welfare_id %}" class="btn btn-danger">INACTIVE</a>
+                                        <a href="{% url 'edit_welfare' welfare_id=m.welfare_id %}" class="btn btn-primary">EDIT</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+{% include 'admin/footer.html' %}

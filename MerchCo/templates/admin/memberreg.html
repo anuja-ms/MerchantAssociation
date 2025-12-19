@@ -1,0 +1,146 @@
+{% load static %}
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+<script src="{% static 'jquery-3.7.1.min.js' %}"></script>
+<script>
+$(document).ready(function() {
+    // Setup the CSRF token for AJAX requests
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": '{{ csrf_token }}' }
+    });
+
+    // When a district is selected
+    $("#district_id").change(function() {
+        var district_id = $(this).val();
+        
+        // AJAX POST request to fetch locations
+        $.ajax({
+            type: "POST",
+            url: '{% url "fillunit" %}',
+            data: { did: district_id },
+            dataType: "json",
+            success: function(data) {
+                // Empty the locations dropdown
+                $('#unit').empty();
+
+                // Populate the locations table with the new data
+                $.each(data, function(key, val) {
+                    
+                    var row = "<option value='"+val.unit_id+"'>"+val.unitname+"</option>";
+
+                    $('#unit').append(row);
+                });
+            }
+        });
+    });
+});
+</script>
+<div class="main-content container-fluid">
+    <section id="multiple-column-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 150vh; padding-right: 10px;">
+            <div class="col-md-7 col-12" style="padding-left: 100;">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Member Registration</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                        <form class="forms-sample" action="{% url 'memberreg_process' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="membername">Member Name</label>
+                                <input type="text" class="form-control" id="membername" name="membername" placeholder="Member Name" required pattern="^[A-Z][a-zA-Z\s]*" title="First letter should be capitalized."    
+                                >
+                            </div>
+                           
+                            <div class="form-group">
+                                <label for="memberphoto">Member Photo</label>
+                                <input type="file" class="form-control" id="memberphoto" name="memberphoto" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="licensephoto">Shop Licence</label>
+                                <input type="file" class="form-control" id="licensephoto" name="licensephoto" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="licensephoto">KMCC Member Code</label>
+                                <input type="text" class="form-control" id="licensephoto" name="membercode" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="district_id">District</label>
+                                <select class="form-control" id="district_id" name="district_id" required>
+                                    <option value="0">--SELECT DISTRICT--</option>
+                                    {% for d in district %}
+                                        <option value="{{d.district_id}}">{{d.districtname}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="unit">Unit</label>
+                                <select class="form-control" id="unit" name="unit" required>
+                                    <option value="0">--SELECT UNIT--</option>
+                                </select>
+                            </div>
+                            <br>
+                            <div class="form-radio">
+                                <label for="gender" class="radio-label">Member Class :</label>
+                                
+                                    <input type="radio" name="class" id="male" checked value="A-class">
+                                    <label for="male">A-Class</label>
+                                    <span class="check"></span>
+         
+                                    <input type="radio" name="class" id="female" value="C-class">
+                                    <label for="female">C-Class</label>
+                                    <span class="check"></span>
+                               
+                            </div> 
+                            <br>
+
+                            <div class="form-group">
+                                <label for="phone">Mobile No</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Mobile NO" required pattern="[0-9]{10}" title="Must contain 10 digits">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mail">Email</label>
+                                <input type="email" class="form-control" id="mail" name="mail" placeholder="Email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Must contain a valid Email Address">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="designation">Designation</label>
+                                <input type="text" class="form-control" id="designation" name="designation" placeholder="Designation" required>
+                            </div>
+
+                            <!-- <div class="form-group">
+                                <label for="status">Status</label>
+                                <input type="text" class="form-control" id="status" name="status" placeholder="Status" required>
+                            </div> -->
+
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                            </div>
+                        </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-12 text-center">
+                                <button type="submit" name="btnadd" class="btn btn-primary px-5 py-3 rounded-pill">Add Now</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+    {% include 'admin/footer.html' %}
+   

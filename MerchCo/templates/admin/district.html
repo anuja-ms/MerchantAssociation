@@ -1,0 +1,37 @@
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+<div class="main-content container-fluid">
+    <section id="multiple-column-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">District Registration</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form class="form" method="post" action="district_process">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-12 col-12">
+                                        <div class="form-group">
+                                            <label for="districtname-column">District Name</label>
+                                            <input type="text" id="districtname-column" class="form-control"
+                                                placeholder="District Name" name="districtname" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 d-flex justify-content-end mt-4">
+                                        <button type="submit" name="btnadd" class="btn btn-primary btn-lg mr-2">Add</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% include 'admin/footer.html' %}

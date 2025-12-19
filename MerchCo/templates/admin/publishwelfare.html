@@ -1,0 +1,136 @@
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+{% load static %}
+
+<script src="{% static 'jquery-3.7.1.min.js' %}"></script>
+<script>
+$(document).ready(function() {
+    // Setup the CSRF token for AJAX requests
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": '{{ csrf_token }}' }
+    });
+
+    // When a district is selected
+    $("#district_id").change(function() {
+        var district_id = $(this).val();
+        
+        // AJAX POST request to fetch locations
+        $.ajax({
+            type: "POST",
+            url: '{% url "fillunit" %}',
+            data: { did: district_id },
+            dataType: "json",
+            success: function(data) {
+                // Empty the unit dropdown
+                $('#unit').empty();
+                $('#unit').append('<option value="0">--SELECT UNIT--</option>');  // Default option
+                
+                // Populate the unit dropdown with the new data
+                $.each(data, function(key, val) {
+                    var row = "<option value='"+val.unit_id+"'>"+val.unitname+"</option>";
+                    $('#unit').append(row);
+                });
+            }
+        });
+    });
+
+    // Load students when unit changes
+    $('#unit').change(function () {
+        var unitid = $(this).val();
+        if (unitid != 0) {  // Only proceed if a valid unit is selected
+            $.ajax({
+                type: "POST",
+                url: '{% url "fill_members" %}',
+                data: { sid: unitid },
+                dataType: "json",
+                success: function (data) {
+                    $('#members').empty(); // Clear previous members list
+                    var s = 1;
+                    // Populate the members table with the new data
+                    $.each(data, function (key, val) {
+                        var row = '<tr>' +
+                                    '<td>' + s++ + '</td>' +
+                                    '<td><img src="/images/' + val.memberphoto + '" class="img-fluid rounded" style="width: 50px; height: 50px;"></td>' +
+                                    '<td>' + val.membername + '</td>' +
+                                    '<td>' + val.email + '</td>' +
+                                    '<td>' + val.designation + '</td>' +
+                                    '<td><input type="checkbox" name="selected_members[]" value="' + val.member_id + '"></td>' +
+                                  '</tr>';
+                        $('#members').append(row);
+                    });
+                },
+                error: function () {
+                    alert("An error occurred while fetching the members.");
+                }
+            });
+        }
+    });
+});
+</script>
+
+
+<div class="main-content container-fluid">
+    <section id="multiple-column-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+            <div class="col-md-8 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Publish Welfare</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form class="form" method="post" action="{% url 'publish_process' %}">
+                                {% csrf_token %}
+                            <input type="hidden" name="welfare_id" value="{{welfare.welfare_id}}">
+                            <!-- Choose District -->
+                            <div class="form-group">
+                                <label for="district_id">District</label>
+                                <select class="form-control" id="district_id" name="district_id" required>
+                                    <option value="0">--SELECT DISTRICT--</option>
+                                    {% for d in districts %}
+                                        <option value="{{d.district_id}}">{{d.districtname}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="unit">Unit</label>
+                                <select class="form-control" id="unit" name="unit" required>
+                                    <option value="0">--SELECT UNIT--</option>
+                                </select>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <label for="members">Members</label>
+                                <table class="table" id="members">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Photo</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Designation</th>
+                                            <th>Select</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Members will be populated here dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12 text-center">
+                            <button type="submit" name="btnadd" class="btn btn-primary px-5 py-3 rounded-pill">Publish</button>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% include 'admin/footer.html' %}

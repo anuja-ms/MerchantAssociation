@@ -1,0 +1,94 @@
+{% include "member/header.html" %}
+
+<div class="main-content container-fluid">
+    <section id="multiple-column-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh; padding-right: 10px;">
+            <div class="col-md-7 col-12" style="padding-left: 100;">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Loan Request</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                        <form class="forms-sample" action="{% url 'loanreq_process' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                <label for="years">Installment policy</label>
+                                <select id="years" class="form-control" name="years" required>
+                                    <option value="12">12 Months</option>
+                                    <option value="24">24 Months</option>
+                                    <option value="36">36 Months</option>
+                                    <!-- Add more years as needed -->
+                                </select>
+                            </div>
+
+                            <!-- Loan Amount -->
+                            <div class="form-group">
+                                <label for="membername">Amount</label>
+                                <input type="number" class="form-control" id="membername" name="amount" placeholder="Amount you wish to take" required>
+                            </div>
+
+                            <!-- Monthly Interest -->
+                            <div class="form-group">
+                                <label for="memberphoto">Monthly Interest (%)</label>
+                                <input type="text" class="form-control" id="memberphoto" name="minterest" placeholder="Monthly Interest" required readonly>
+                            </div>
+
+                            <!-- Monthly Amount -->
+                            <div class="form-group">
+                                <label for="licensephoto">Monthly Installment</label>
+                                <input type="text" class="form-control" id="licensephoto" name="monthlyamount" placeholder="Monthly Installment" required readonly>
+                            </div>
+
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12 text-center">
+                            <button type="submit" name="btnadd" class="btn btn-primary px-5 py-3 rounded-pill">Add Now</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const amountInput = document.getElementById('membername');
+        const monthlyInterestInput = document.getElementById('memberphoto');
+        const monthlyAmountInput = document.getElementById('licensephoto');
+        const yearsSelect = document.getElementById('years');
+        const annualinterestRate = 10 / 100;  // Monthly interest rate (5% per year, converted to decimal)
+        
+        // Function to calculate Monthly Interest and Monthly Payment
+        function calculateLoanDetails() {
+            const amount = parseFloat(amountInput.value);
+            const yearsToMaturity = parseInt(yearsSelect.value);
+            alert(yearsToMaturity);
+            const interestRate =  annualinterestRate/12;
+            if (!isNaN(amount) && amount > 0) {
+                // Monthly Interest Calculation
+                const monthlyInterest = amount * interestRate;
+                monthlyInterestInput.value = monthlyInterest.toFixed(2);  // Show monthly interest
+
+                // Monthly Payment Calculation using the amortization formula
+                const r = interestRate; // Monthly interest rate
+                const n = yearsToMaturity; // Number of months
+
+                const monthlyPayment = amount * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+                monthlyAmountInput.value = monthlyPayment.toFixed(2);  // Show monthly payment
+            } else {
+                // Clear the fields if the input is invalid
+                monthlyInterestInput.value = '';
+                monthlyAmountInput.value = '';
+            }
+        }
+
+        // Event listener for amount input and years select
+        amountInput.addEventListener('input', calculateLoanDetails);
+        yearsSelect.addEventListener('change', calculateLoanDetails);
+    });
+</script>

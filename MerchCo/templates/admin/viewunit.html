@@ -1,0 +1,88 @@
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+{% load static %}
+<script src="{% static 'jquery-3.7.1.min.js' %}"></script>
+<script>
+$(document).ready(function() {
+    // Setup the CSRF token for AJAX requests
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": '{{ csrf_token }}' }
+    });
+
+    // When a district is selected
+    $("#district_id").change(function() {
+        var district_id = $(this).val();
+        
+        // AJAX POST request to fetch locations
+        $.ajax({
+            type: "POST",
+            url: '{% url "fillunit" %}',
+            data: { did: district_id },
+            dataType: "json",
+            success: function(data) {
+                // Empty the locations dropdown
+                $('#units').empty();
+
+                // Populate the locations table with the new data
+                $.each(data, function(key, val) {
+                    var id = val.unit_id;
+                    var deleteurl = '{% url "deleteunit" 0 %}'.replace('0', id);
+                    var editurl = '{% url "editunit" 0 %}'.replace('0', id);
+                    var row = "<tr>" +
+                        "<td>" + (key + 1) + "</td>" +
+                        "<td>" + val.unitname + "</td>" +
+                        "<td><a href='" + deleteurl + "' class='btn btn-danger btn-sm'>Delete</a></td>" +
+                        "<td><a href='" + editurl + "' class='btn btn-primary btn-sm'>Edit</a></td>" +
+                    "</tr>";
+                    $('#units').append(row);
+                });
+            }
+        });
+    });
+});
+</script>
+
+<div class="main-content container-fluid">
+    <section id="multiple-column-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+            <div class="col-md-8 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Unit Details</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <!-- Choose District -->
+                            <div class="form-group">
+                                <label for="district_id"><h4><i>Choose District</i></h4></label>
+                                <select name="districtid" id="district_id" class="form-control">
+                                    <option value selected disabled>....Select....</option>
+                                    {% for d in districts %}
+                                        <option value="{{ d.district_id }}">{{ d.districtname }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- unit Table -->
+                            <table class="table table-bordered" style="width: 100%; max-width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>SL No</th>
+                                        <th>Unit Name</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="units">
+                                    <!-- Locations will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% include 'admin/footer.html' %}
+

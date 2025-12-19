@@ -1,0 +1,256 @@
+{% include "member/header.html" %}
+<style>
+  /* Global Styles */
+  body {
+    background-color: #f8f8f8; /* Light grey background for modern white theme */
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.9); /* Light glassmorphism effect */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow for card */
+    backdrop-filter: blur(10px); /* Glassmorphism blur effect */
+    padding: 30px;
+    width: 100%;
+    max-width: 800px;
+    border: none;
+    margin: 20px;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .card-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333; /* Dark text for contrast */
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  /* Styling for form inputs */
+  .form-group label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333; /* Dark grey labels */
+    margin-bottom: 10px;
+  }
+
+  .form-control {
+    background: rgba(255, 255, 255, 0.85); /* Slightly opaque white for inputs */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+
+  .form-control:focus {
+    background-color: #fff;
+    border-color: #007bff;
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5); /* Blue shadow on focus */
+  }
+
+  .form-control::placeholder {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  /* File input */
+  .form-group input[type="file"] {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    color: #333;
+    font-size: 14px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .form-group input[type="file"]:hover {
+    background-color: rgba(255, 255, 255, 1);
+    cursor: pointer;
+  }
+
+  .form-group img {
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* Button Styles */
+  .btn {
+    background-color: #007bff; /* Blue for buttons */
+    color: white;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: none;
+    margin-top: 20px;
+  }
+
+  .btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-light {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #333;
+    border-radius: 30px;
+    padding: 12px 30px;
+    font-weight: 600;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-light:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Read-only inputs */
+  .form-control[readonly] {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #aaa;
+  }
+
+  .form-group .form-control[readonly]:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    cursor: not-allowed;
+  }
+
+  /* Form Container */
+  .col-7.grid-margin.stretch-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    width: 100%;
+  }
+
+  /* Responsive Design */
+  @media screen and (max-width: 768px) {
+    .card {
+      width: 90%;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+    }
+
+    .form-control {
+      padding: 12px;
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="col-7 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Edit Profile</h4>
+        <form class="forms-sample" method="POST" action="{% url 'edit_member' member_id=member.member_id %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          <!-- Member Name -->
+          <div class="form-group">
+            <label for="exampleInputName1">Member Name</label>
+            <input type="text" class="form-control" id="exampleInputName1" name="membername" value="{{member.membername}}">
+          </div>
+
+          <!-- Member Image -->
+          <div class="form-group">
+            <label for="memberphoto">Member Image</label><br>
+            <input type="hidden" name="oldimage" value="{{ member.memberphoto }}">
+            <img src="/images/{{ member.memberphoto }}" style="width: 100px; height: 100px; border-radius: 10px;">
+            <input type="file" name="memberphoto" class="form-control">
+          </div>
+
+          <!-- Shop License Image -->
+          <div class="form-group">
+            <label for="licensephoto">Shop License Image</label><br>
+            <input type="hidden" name="oldlicenseimage" value="{{ member.licensephoto }}">
+            <img src="/images/{{ member.licensephoto }}" style="width: 100px; height: 100px; border-radius: 10px;">
+            <input type="file" name="licensephoto" class="form-control">
+          </div>
+
+          <!-- Member Code -->
+          <div class="form-group">
+            <label for="exampleInputCity1">KMCC Member Code</label>
+            <input type="text" class="form-control" id="exampleInputCity1" name="membercode" value="{{member.membercode}}" readonly>
+          </div>
+
+          <!-- District -->
+          <div class="form-group">
+            <label for="exampleInputCity1">District</label>
+            <input type="text" class="form-control" id="exampleInputCity1" name="district" value="{{member.unit_id.district_id.districtname}}" readonly>
+          </div>
+
+          <!-- Unit -->
+          <div class="form-group">
+            <label for="exampleInputCity1">Unit</label>
+            <input type="text" class="form-control" id="exampleInputCity1" name="unit" value="{{member.unit_id.unitname}}" readonly>
+          </div>
+
+          <!-- Member Class -->
+          <div class="form-group">
+            <label for="exampleInputEmail3">Member Class</label>
+            <input type="text" class="form-control" id="exampleInputEmail3" name="class" value="{{member.memberclass}}" readonly>
+          </div>
+
+          <!-- Mobile -->
+          <div class="form-group">
+            <label for="exampleInputEmail3">Mobile</label>
+            <input type="text" class="form-control" id="exampleInputEmail3" name="phone" value="{{member.mobile_no}}">
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="exampleInputEmail3">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail3" name="mail" value="{{member.email}}">
+          </div>
+
+          <!-- Designation -->
+          <div class="form-group">
+            <label for="exampleInputEmail3">Designation</label>
+            <input type="text" class="form-control" id="exampleInputEmail3" name="designation" value="{{member.designation}}" readonly>
+          </div>
+
+          <!-- Username -->
+          <div class="form-group">
+            <label for="exampleInputEmail3">Username</label>
+            <input type="text" class="form-control" id="exampleInputEmail3" name="username" value="{{member.login_id.username}}">
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label for="exampleInputPassword4">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword4" name="password" value="{{member.login_id.password}}">
+          </div>
+
+          <!-- Buttons -->
+          <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+          <button type="button" class="btn btn-light" onclick="window.history.back();">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

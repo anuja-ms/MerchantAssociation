@@ -1,0 +1,125 @@
+{% include "member/header.html" %}
+
+<div class="main-content container-fluid">
+    <div class="col-12 d-flex justify-content-end">
+    </div>
+    <!-- Hoverable rows start -->
+    <div class="row justify-content-center align-items-center" style="min-height: 80vh; padding-right: 25px;">
+        <div class="col-md-9 col-12" style="padding-left:25;">
+            <div class="card shadow-lg">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="card-title" style="color: white;">Loans</h4>
+                </div>
+                <div class="card-content">
+
+                    <!-- table hover -->
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered no-wrap">
+                            <thead>
+                                <tr class="text-center text-white">
+                                    <th>No</th>
+                                    <th>Member Name</th>
+                                    <th>Member Class</th>
+                                    <th>Requested Amount</th>
+                                    <th>Installment Months</th>
+                                    <th>Monthly Installment</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for l in loan %}
+                                    <tr class="text-center hover-effect">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ l.member_id.membername }}</td>
+                                        <td>{{ l.member_id.memberclass }}</td>
+                                        <td>₹ {{ l.amount }}</td>
+                                        <td>{{ l.installmentmonths }}</td>
+                                        <td>₹ {{ l.monthlyamount }}</td>
+                                        <td><a href="{% url 'loantransaction' id=l.loan_id %}" class="payment-button"><i class="fa fa-credit-card"></i> Pay</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                  </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'admin/footer.html' %}
+
+<!-- Add some CSS -->
+<style>
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 15px black;
+    }
+
+    .card-header {
+        border-radius: 15px 15px 0 0;
+        padding: 20px;
+        background-color: black; /* Set header background to black */
+        color: white; /* Make header text white */
+    }
+
+    .table {
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    th {
+        font-weight: bold;
+        color: white; /* Set table header text to white */
+    }
+
+    tr {
+        transition: background-color 0.3s ease;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .payment-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 20px;
+        background-color: black; /* Set button background to black */
+        color: white; /* Make button text white */
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .payment-button:hover {
+        background-color: #333; /* Darken button on hover */
+    }
+
+    .payment-button i {
+        margin-right: 8px;
+    }
+
+    .hover-effect:hover {
+        background-color: #f9f9f9;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 768px) {
+        .col-md-7 {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .card-header {
+            text-align: center;
+        }
+
+        .payment-button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+        }
+    }
+</style>

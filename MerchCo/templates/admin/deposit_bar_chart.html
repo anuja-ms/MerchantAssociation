@@ -1,0 +1,25 @@
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit Bar Chart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Total Deposits per Month</h1>
+    <img src="{% url 'deposit_bar_chart' %}" alt="Deposit Bar Chart" />
+</body>
+</html>
+{% include "admin/footer.html" %}
+

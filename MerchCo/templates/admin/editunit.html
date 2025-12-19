@@ -1,0 +1,52 @@
+{% include "admin/header.html" %}
+{% include "admin/sidebar.html" %}
+<div class="main-content container-fluid">
+    <section id="multiple-column-form">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Edit Unit Details</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form class="form" method="post" action="{% url 'editunit' unit_id=unit.unit_id %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-column">District Name</label>
+                                            <select type="text" id="first-name-column" class="form-control"
+                                             name="district_id">
+                                             <option value="0">--SELECT DISTRICT--</option>
+                                             {% for d in district %}
+                                             <option value="{{d.district_id}}" {% if d.district_id == unit.district_id_id %} selected="selected" {% endif %}>
+                                                {{d.districtname}}
+                                             </option>
+                                             {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="city-column">Unit Name</label>
+                                            <input type="text" id="city-column" class="form-control" placeholder="City"
+                                                name="unitname" value="{{unit.unitname}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 d-flex justify-content-end mt-5">
+                                        <button type="submit" name="btnadd" class="btn btn-primary btn-lg mr-2">Update</button>
+                                        <button type="reset"
+                                            class="btn btn-light-secondary btn-lg mr-1 mb-1">Reset</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% include 'admin/footer.html' %}

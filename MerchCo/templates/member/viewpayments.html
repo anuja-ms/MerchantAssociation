@@ -1,0 +1,36 @@
+{% include "member/header.html" %}
+<div class="row">
+    <div class="col-lg-16 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Paid Loans</h4>
+                <div class="table-responsive" style="max-width: 100%; padding-right:102px; margin: 0 auto;">
+                    <table class="table" style="font-size: 1.5rem; width: 100%; table-layout: fixed;"> <!-- Adjusted width to 100% and added fixed table layout -->
+                        <thead>
+                            <tr>
+                                <th>Payment ID</th>
+                                <th>Loan Amount</th>
+                                <th>Paid Amount</th>
+                                <th>Paid Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for m in loan %}
+                            <tr style="height: 60px;"> <!-- Increased row height -->
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ m.loanamount }}</td>
+                                <td>
+                                    <label class="badge badge-gradient-success">{{ m.amount }}</label>
+                                </td>
+                                <td>{{ m.paiddate }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% include "member/footer.html" %}
